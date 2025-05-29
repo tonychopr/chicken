@@ -249,15 +249,14 @@
     halo.volume = 0.5;
     halo.play();
 
-    // Random chicken SFX
-    const chickenSounds = ['CH00.mp3','CH01.mp3','CH02.mp3'];
-    const sfx = new Audio();
-    sfx.volume = 0.5;
-    function playRandomChickenSound() {
-      const choice = chickenSounds[Math.floor(Math.random()*chickenSounds.length)];
-      sfx.src = choice;
-      sfx.play();
-    }
+    // Random chicken SFX – a brand-new Audio per click
+const chickenSounds = ['CH00.mp3','CH01.mp3','CH02.mp3'];
+function playRandomChickenSound() {
+  const choice = chickenSounds[Math.floor(Math.random()*chickenSounds.length)];
+  const audio = new Audio(choice);
+  audio.volume = 0.5;
+  audio.play().catch(err => console.warn('SFX play failed:',err));
+}
 
     // ----- HEAD logic -----
     const heads = [
