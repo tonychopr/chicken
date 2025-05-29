@@ -408,31 +408,27 @@ function playRandomChickenSound() {
     });
 
     // Capture a fixed 512×768px box centered in the viewport
-  btnCopy.addEventListener('click', () => {
-    const width  = 517;
-    const height = 645;
-    const x      = (window.innerWidth  - width)  / 3.15;
-    const y      = (window.innerHeight - height) / 2;
-    const scale  = window.devicePixelRatio || 1;
+    btnCopy.addEventListener('click', () => {
+      const width = 516.8;
+      const height = 644.8;
+      const x = (window.innerWidth  - width)  / 3.15;
+      const y = (window.innerHeight - height) / 2;
+      const scale = window.devicePixelRatio || 1;
 
-    html2canvas(document.body, {
-      x: x,
-      y: y,
-      width: width,
-      height: height,
-      backgroundColor: null,
-      useCORS: true,               // ← note the comma here
-      scale: scale                 // ← and this new line
-    }).then(canvas => {
-      canvas.toBlob(blob => {
-        navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ])
-          .then(() => {
-            btnCopy.textContent = 'Copied!';
-            setTimeout(() => btnCopy.textContent = 'Copy Image', 1500);
-          });
-      });
+      html2canvas(document.body, {
+        x,
+        y,
+        width,
+        height,
+        backgroundColor: null,
+        useCORS: true
+       scale       // ← add this
+  }).then(canvas => {
+    canvas.toBlob(blob => {
+      /* …rest of your copy logic… */
     });
   });
+});
 
     btnTweet.addEventListener('click', () => {
       window.open(
