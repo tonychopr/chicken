@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <link rel="icon" href="mug.png" type="image/png">
+ng" type="image/png">
 
   <meta charset="UTF-8">
   <meta 
@@ -52,13 +49,14 @@
 </a>
 
 
-  <!-- autoplaying halo music -->
-  <audio
-    id="halo-audio"
-    src="halo.mp3"
-    preload="auto"
-    loop
-  ></audio>
+  <!-- in your <body>, replace your old audio tag with this: -->
+<audio
+  id="halo-audio"
+  src="halo.mp3"
+  preload="auto"
+  loop
+  autoplay
+></audio>
 
   <!-- Full-page background video -->
   <video
@@ -67,6 +65,7 @@
     muted
     loop
     playsinline
+    preload="auto"
   >
     <source src="BG.mp4" type="video/mp4">
     Your browser doesn’t support HTML5 video.
@@ -276,7 +275,7 @@
         document.getElementById('btn-head').textContent = 'Head';
       } else {
         overlayH.style.display = '';
-        overlayH.src           = `HEAD/HEAD0/${encodeURIComponent(f)}`;
+        overlayH.src           = HEAD/HEAD0/${encodeURIComponent(f)};
         document.getElementById('btn-head').textContent = f.replace(/\s0\.png$/,'').trim();
       }
     }
@@ -296,7 +295,7 @@
         document.getElementById('btn-glass').textContent = 'Glasses';
       } else {
         overlayG.style.display = '';
-        overlayG.src           = `glassses/glasses0/${encodeURIComponent(f)}`;
+        overlayG.src           = glassses/glasses0/${encodeURIComponent(f)};
         document.getElementById('btn-glass').textContent = f.replace(/\s0\.png$/,'').trim();
       }
     }
@@ -316,7 +315,7 @@
         document.getElementById('btn-shirt').textContent = 'Shirt';
       } else {
         overlayS.style.display = '';
-        overlayS.src           = `SHIRTHOODIE/SHIRTHOODIE%200/${encodeURIComponent(f)}`;
+        overlayS.src           = SHIRTHOODIE/SHIRTHOODIE%200/${encodeURIComponent(f)};
         document.getElementById('btn-shirt').textContent = f.replace(/\s0\.png$/,'').trim();
       }
     }
@@ -336,7 +335,7 @@
         document.getElementById('btn-bg').textContent = 'Background';
       } else {
         overlayB.style.display = '';
-        overlayB.src           = `background/${encodeURIComponent(f)}`;
+        overlayB.src           = background/${encodeURIComponent(f)};
         document.getElementById('btn-bg').textContent = f.replace(/\.png$/,'').trim();
       }
     }
@@ -424,6 +423,92 @@
         'https://x.com/intent/post?text=I%20AM%20%24CHICKEN',
         '_blank','width=550,height=420'
       );
+    });
+  </script>
+  <script>
+  window.addEventListener('load', () => {
+    const bgVideo = document.getElementById('bg-video');
+    // ensure it's muted so browsers allow autoplay
+    bgVideo.muted = true;
+    bgVideo.play().catch(err => {
+      console.warn('Background video failed to autoplay:', err);
+    });
+  });
+</script>
+<!-- right before </body> add: -->
+<script>
+  const halo = document.getElementById('halo-audio');
+  halo.volume = 0.5;
+
+  // once the browser has buffered enough, kick it off
+  halo.addEventListener('canplaythrough', () => {
+    halo.play().catch(err => console.error('Autoplay failed:', err));
+    const halo = document.getElementById('halo-audio');
+const btnToggle = document.getElementById('btn-sound-toggle');
+
+// start muted / paused
+halo.loop = true;
+halo.volume = 0.5;
+halo.pause();
+
+btnToggle.addEventListener('click', () => {
+  if (halo.paused) {
+    halo.play().catch(()=>{});    // user gesture, so allowed
+    btnToggle.textContent = '🔊';
+  } else {
+    halo.pause();
+    btnToggle.textContent = '🔈';
+  }
+});
+
+  });
+</script>
+  <!-- 🔈 Sound Toggle Button -->
+  <button
+    id="btn-sound-toggle"
+    style="
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      color: white;
+      font-size: 18px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    "
+  >🔈</button>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1) find your audio element
+      const halo = document.getElementById('halo-audio');
+      if (!halo) {
+        console.error('✨ Toggle script: <audio id="halo-audio"> not found');
+        return;
+      }
+
+      // 2) set initial state
+      halo.loop   = true;
+      halo.volume = 0.5;
+      halo.pause();                // ensure it’s paused at start
+
+      // 3) find the toggle button
+      const btn = document.getElementById('btn-sound-toggle');
+      btn.textContent = '🔈';      // muted icon initially
+
+      // 4) on click, toggle play/pause
+      btn.addEventListener('click', () => {
+        if (halo.paused) {
+          halo.play().catch(err => console.warn('Play failed:', err));
+          btn.textContent = '🔊';
+        } else {
+          halo.pause();
+          btn.textContent = '🔈';
+        }
+      });
     });
   </script>
 </body>
