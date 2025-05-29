@@ -421,12 +421,6 @@ function playRandomChickenSound() {
         height,
         backgroundColor: null,
         useCORS: true
-        scale: window.devicePixelRatio || 2, // Adjust for high-DPI displays
-    onrendered: (canvas) => {
-      // Disable image smoothing
-      const ctx = canvas.getContext('2d');
-      ctx.imageSmoothingEnabled = false;
-        }
       }).then(canvas => {
         canvas.toBlob(blob => {
           navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ])
@@ -435,7 +429,7 @@ function playRandomChickenSound() {
               btnCopy.textContent = 'Copied!';
               setTimeout(() => btnCopy.textContent = prev, 1500);
             });
-        }, 'image/png', 1.0); // Ensure high-quality PNG
+        });
       });
     });
 
