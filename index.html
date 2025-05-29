@@ -413,7 +413,6 @@ function playRandomChickenSound() {
       const height = 644.8;
       const x = (window.innerWidth  - width)  / 3.15;
       const y = (window.innerHeight - height) / 2;
-      const scale = window.devicePixelRatio || 1;
 
       html2canvas(document.body, {
         x,
@@ -422,13 +421,23 @@ function playRandomChickenSound() {
         height,
         backgroundColor: null,
         useCORS: true
-       scale       // ← add this
-  }).then(canvas => {
-    canvas.toBlob(blob => {
-      /* …rest of your copy logic… */
+        scale: window.devicePixelRatio || 2, // Adjust for high-DPI displays
+    onrendered: (canvas) => {
+      // Disable image smoothing
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
+        }
+      }).then(canvas => {
+        canvas.toBlob(blob => {
+          navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ])
+            .then(() => {
+              const prev = btnCopy.textContent;
+              btnCopy.textContent = 'Copied!';
+              setTimeout(() => btnCopy.textContent = prev, 1500);
+            });
+        }, 'image/png', 1.0); // Ensure high-quality PNG
+      });
     });
-  });
-});
 
     btnTweet.addEventListener('click', () => {
       window.open(
