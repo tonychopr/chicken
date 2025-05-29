@@ -290,7 +290,7 @@ function playRandomChickenSound() {
         document.getElementById('btn-head').textContent = 'Head';
       } else {
         overlayH.style.display = '';
-        overlayH.src           = HEAD/HEAD0/${encodeURIComponent(f)};
+        overlayH.src           = `HEAD/HEAD0/${encodeURIComponent(f)}`;
         document.getElementById('btn-head').textContent = f.replace(/\s0\.png$/,'').trim();
       }
     }
@@ -310,7 +310,7 @@ function playRandomChickenSound() {
         document.getElementById('btn-glass').textContent = 'Glasses';
       } else {
         overlayG.style.display = '';
-        overlayG.src           = glassses/glasses0/${encodeURIComponent(f)};
+        overlayG.src           = `glassses/glasses0/${encodeURIComponent(f)}`;
         document.getElementById('btn-glass').textContent = f.replace(/\s0\.png$/,'').trim();
       }
     }
@@ -330,7 +330,7 @@ function playRandomChickenSound() {
         document.getElementById('btn-shirt').textContent = 'Shirt';
       } else {
         overlayS.style.display = '';
-        overlayS.src           = SHIRTHOODIE/SHIRTHOODIE%200/${encodeURIComponent(f)};
+        overlayS.src           = `SHIRTHOODIE/SHIRTHOODIE%200/${encodeURIComponent(f)}`;
         document.getElementById('btn-shirt').textContent = f.replace(/\s0\.png$/,'').trim();
       }
     }
@@ -350,7 +350,7 @@ function playRandomChickenSound() {
         document.getElementById('btn-bg').textContent = 'Background';
       } else {
         overlayB.style.display = '';
-        overlayB.src           = background/${encodeURIComponent(f)};
+        overlayB.src           = `background/${encodeURIComponent(f)}`;
         document.getElementById('btn-bg').textContent = f.replace(/\.png$/,'').trim();
       }
     }
@@ -527,4 +527,4 @@ btnToggle.addEventListener('click', () => {
     });
   </script>
 </body>
-</html
+</html>
