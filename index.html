@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="mug.png" type="image/png">
+
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport" 
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+  <title>Chicken</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Added hueRotate animation for bounce-chicken -->
+  <style>
+    /* disable text/image selection */
+* {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+/* remove focus outlines / tap highlights */
+*:focus {
+  outline: none !important;
+}
+* {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+    @keyframes hueRotate {
+      0%   { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+  </style>
+  <!-- html2canvas for screenshot -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <!-- add this right after <body> -->
+<div id="coming-soon">CA: Coming Soon</div>
+<!-- drop this in your <body> -->
+<a
+  id="x-logo-button"
+  href="https://x.com/i/communities/1921181819426283578"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src="x%20logo.png"
+    alt="X Logo"
+  />
+</a>
+
+
+  <!-- autoplaying halo music -->
+  <audio
+    id="halo-audio"
+    src="halo.mp3"
+    preload="auto"
+    loop
+  ></audio>
+
+  <!-- Full-page background video -->
+  <video
+    id="bg-video"
+    autoplay
+    muted
+    loop
+    playsinline
+  >
+    <source src="BG.mp4" type="video/mp4">
+    Your browser doesn’t support HTML5 video.
+  </video>
+
+  <!-- bouncing chicken silhouette (10% larger, color-cycling) -->
+  <img
+    id="bounce-chicken"
+    src="bouncechicken.png"
+    alt="Bounce Chicken"
+    style="
+      position: fixed;
+      width: 141px;
+      height: auto;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+      animation: hueRotate 5s infinite linear;
+    "
+  >
+
+  <!-- WRAP: only the overlays + base chicken go in here -->
+  <div id="chicken-container">
+    <!-- Background overlay (behind everything except video) -->
+    <img
+      id="background-overlay"
+      src=""
+      alt="Background Overlay"
+      style="
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 512px; height: auto;
+        object-fit: cover;
+        z-index: 0;
+        pointer-events: none;
+        display: none;
+        border: 2px solid white;
+      "
+    >
+
+    <!-- Base chicken, centered -->
+    <img
+      id="base-chicken"
+      src="base_chicken.png"
+      alt="Base Chicken"
+      style="
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 512px; height: auto;
+        z-index: 2;
+        pointer-events: none;
+      "
+    >
+
+    <!-- Head overlay (starts hidden) -->
+    <img
+      id="head-overlay"
+      src=""
+      alt="Head Overlay"
+      style="
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 512px; height: auto;
+        z-index: 3;
+        pointer-events: none;
+        display: none;
+      "
+    >
+
+    <!-- Glasses overlay (starts hidden) -->
+    <img
+      id="glass-overlay"
+      src=""
+      alt="Glasses Overlay"
+      style="
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 512px; height: auto;
+        z-index: 4;
+        pointer-events: none;
+        display: none;
+      "
+    >
+
+    <!-- Shirt overlay (starts hidden) -->
+    <img
+      id="shirt-overlay"
+      src=""
+      alt="Shirt Overlay"
+      style="
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 512px; height: auto;
+        z-index: 5;
+        pointer-events: none;
+        display: none;
+      "
+    >
+  </div>
+  <!-- /#chicken-container -->
+
+  <!-- Head Retro controls -->
+  <div id="controls" style="
+    position: fixed; bottom:300px; left:84%;
+    transform: translateX(-50%); display:flex; gap:8px;
+    z-index: 6;
+  ">
+    <button id="btn-left"  class="ctrl-btn">◀</button>
+    <button id="btn-head"  class="ctrl-btn">Head</button>
+    <button id="btn-right" class="ctrl-btn">▶</button>
+  </div>
+
+  <!-- Glasses Retro controls -->
+  <div id="controls-glass" style="
+    position: fixed; bottom:260px; left:84%;
+    transform: translateX(-50%); display:flex; gap:8px;
+    z-index: 6;
+  ">
+    <button id="btn-g-left"  class="ctrl-btn">◀</button>
+    <button id="btn-glass"   class="ctrl-btn">Glasses</button>
+    <button id="btn-g-right" class="ctrl-btn">▶</button>
+  </div>
+
+  <!-- Shirt Retro controls -->
+  <div id="controls-shirt" style="
+    position: fixed; bottom:220px; left:84%;
+    transform: translateX(-50%); display:flex; gap:8px;
+    z-index: 6;
+  ">
+    <button id="btn-s-left"  class="ctrl-btn">◀</button>
+    <button id="btn-shirt"   class="ctrl-btn">Shirt</button>
+    <button id="btn-s-right" class="ctrl-btn">▶</button>
+  </div>
+
+  <!-- Background Retro controls -->
+  <div id="controls-bg" style="
+    position: fixed; bottom:180px; left:84%;
+    transform: translateX(-50%); display:flex; gap:8px;
+    z-index: 6;
+  ">
+    <button id="btn-bg-left"  class="ctrl-btn" style="background:black;color:white;">◀</button>
+    <button id="btn-bg"       class="ctrl-btn" style="background:black;color:white;">Background</button>
+    <button id="btn-bg-right" class="ctrl-btn" style="background:black;color:white;">▶</button>
+  </div>
+
+  <!-- SHARE UI at bottom center -->
+  <div id="share-ui" style="
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  ">
+    <button id="btn-share" class="ctrl-btn">Share</button>
+    <div id="share-options" style="
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+    ">
+      <button id="btn-copy"  class="ctrl-btn" style="background:black;color:white;">Copy Image</button>
+      <button id="btn-tweet" class="ctrl-btn">Share to X</button>
+    </div>
+  </div>
+
+  <script>
+    // Play halo music
+    const halo = document.getElementById('halo-audio');
+    halo.volume = 0.5;
+    halo.play();
+
+    // Random chicken SFX
+    const chickenSounds = ['CH00.mp3','CH01.mp3','CH02.mp3'];
+    const sfx = new Audio();
+    sfx.volume = 0.5;
+    function playRandomChickenSound() {
+      const choice = chickenSounds[Math.floor(Math.random()*chickenSounds.length)];
+      sfx.src = choice;
+      sfx.play();
+    }
+
+    // ----- HEAD logic -----
+    const heads = [
+      "", "alphonse_elric 0.png","brez scales 0.png","covid mask 0.png","gaming headset 0.png","ice spice 0.png","joe meme 0.png","JUICE WRLD 0.png","lenny 0.png","look back at it 0.png","orangie 0.png","pepe 0.png","piccolo mask 0.png","pigtails 0.png","roblox 0.png","space pig 0.png","troll 0.png","wif hat 0.png","xxxtentacion 0.png","headphones 0.png","bonnet 0.png","frog hat 0.png","drip visor 0.png","hw.png",
+      "camron hat 0.png","whale 0.png","Chrome hat 0.png","death the kid 0.png","itachi hair 0.png","jester hat 0.png",
+      "kakashi 0.png","luffy hat 0.png","lv beanie 0.png","naruto headband_hair 0.png","NY BALL CAP 0.png",
+      "kabuto helmet 0.png","okc hat 0.png","SIP HAT 0.png","von dutch 0.png","wizard hat 0.png"
+    ];
+    let headIndex = 0;
+    const overlayH = document.getElementById('head-overlay');
+    document.getElementById('btn-left').onclick  = () => { headIndex=(headIndex-1+heads.length)%heads.length; updateHead(); playRandomChickenSound(); };
+    document.getElementById('btn-right').onclick = () => { headIndex=(headIndex+1)%heads.length; updateHead(); playRandomChickenSound(); };
+    document.getElementById('btn-head').onclick  = updateHead;
+    function updateHead() {
+      const f = heads[headIndex];
+      if (!f) {
+        overlayH.style.display = 'none';
+        document.getElementById('btn-head').textContent = 'Head';
+      } else {
+        overlayH.style.display = '';
+        overlayH.src           = `HEAD/HEAD0/${encodeURIComponent(f)}`;
+        document.getElementById('btn-head').textContent = f.replace(/\s0\.png$/,'').trim();
+      }
+    }
+    updateHead();
+
+    // ----- GLASSES logic -----
+    const glasses = ["","eye patch 0.png","mlg 0.png","white eyes 0.png","visor 0.png","chanel glasses 0.png","mog glasses 0.png","spiral eyes 0.png","visor 0.png","black eyes.png","laser eyes.png","red glasses 0.png","sports glasses 0.png"];
+    let glassIndex = 0;
+    const overlayG = document.getElementById('glass-overlay');
+    document.getElementById('btn-g-left').onclick  = () => { glassIndex=(glassIndex-1+glasses.length)%glasses.length; updateGlass(); playRandomChickenSound(); };
+    document.getElementById('btn-g-right').onclick = () => { glassIndex=(glassIndex+1)%glasses.length; updateGlass(); playRandomChickenSound(); };
+    document.getElementById('btn-glass').onclick   = updateGlass;
+    function updateGlass() {
+      const f = glasses[glassIndex];
+      if (!f) {
+        overlayG.style.display = 'none';
+        document.getElementById('btn-glass').textContent = 'Glasses';
+      } else {
+        overlayG.style.display = '';
+        overlayG.src           = `glassses/glasses0/${encodeURIComponent(f)}`;
+        document.getElementById('btn-glass').textContent = f.replace(/\s0\.png$/,'').trim();
+      }
+    }
+    updateGlass();
+
+    // ----- SHIRT logic -----
+    const shirts = ["","chrome hearts hoodie pink 0.png","pink scarf.png","yoyo 0.png","oragami wings 0.png","akira 0.png","chrome tank black 0.png","chrome tank white 0.png","fendi coat 0.png","gangsta chick.png","labubu 0.png","matcha 0.png","money spread 0.png","naruto 0.png","SU SHIRT 0.png","yoda hoodie 0.png","YVL 0.png","happy chick 0.png","toaster 00.png","cape 0.png","wire scarf 0.png","lil dude 0.png","bra 0.png","backpack 0.png","boombox 0.png","tattoos 0.png","knit sweater 0.png","rain coat 0.png","camron 0.png","pink bape 0.png","denim tears hoodie 0.png","amiri 0.png","burberry hoodie 0.png","muscle vintage shirt 0.png","monclear puffer 0.png","chrome shirt 0.png","leather jacket 0.png","ronaldo 0.png","thunder jersey 0.png","white t 0.png"];
+    let shirtIndex = 0;
+    const overlayS = document.getElementById('shirt-overlay');
+    document.getElementById('btn-s-left').onclick  = () => { shirtIndex=(shirtIndex-1+shirts.length)%shirts.length; updateShirt(); playRandomChickenSound(); };
+    document.getElementById('btn-s-right').onclick = () => { shirtIndex=(shirtIndex+1)%shirts.length; updateShirt(); playRandomChickenSound(); };
+    document.getElementById('btn-shirt').onclick   = updateShirt;
+    function updateShirt() {
+      const f = shirts[shirtIndex];
+      if (!f) {
+        overlayS.style.display = 'none';
+        document.getElementById('btn-shirt').textContent = 'Shirt';
+      } else {
+        overlayS.style.display = '';
+        overlayS.src           = `SHIRTHOODIE/SHIRTHOODIE%200/${encodeURIComponent(f)}`;
+        document.getElementById('btn-shirt').textContent = f.replace(/\s0\.png$/,'').trim();
+      }
+    }
+    updateShirt();
+
+    // ----- BACKGROUND logic -----
+    const backgrounds = ["","field.png","backrooms 0.png","slether chicken.png","chicken cooked.png","dotted chicken.png","weird ah chicken.png","alchemy hand.png","elegant chicken.png","cool chicken.png","ace.png","glass window.png","neet.png","ship.png","squid monster.png","peacock.png","80s.png","bathing chicken.png","shittin chicken.png","chillin chicken.png","ancient chicken fam.png","japanese chicken.png","coraline vibe.png","inverted face.png","blue toile.png","princess peaches castle.png","forest text book style.png","spotlight.png","grim reaper.png","dark cat.png","spiral.png","5 star.png","nice flowers.png","grapevine.png","tomato soup.png","CREEPY FACE.png","castle.png","cave.png","spongebob00.png","spongebob.png","kai room.png","BW village.png","psychedelic storm nature.png","swirl sky.png","psychedelic faces.png","tree.png","pink flowers.png","moon.png","swamp.png","troll park.png","abstract faces.png","turtle.png"];
+    let bgIndex = 0;
+    const overlayB = document.getElementById('background-overlay');
+    document.getElementById('btn-bg-left').onclick  = () => { bgIndex=(bgIndex-1+backgrounds.length)%backgrounds.length; updateBackground(); playRandomChickenSound(); };
+    document.getElementById('btn-bg-right').onclick = () => { bgIndex=(bgIndex+1)%backgrounds.length; updateBackground(); playRandomChickenSound(); };
+    document.getElementById('btn-bg').onclick        = updateBackground;
+    function updateBackground() {
+      const f = backgrounds[bgIndex];
+      if (!f) {
+        overlayB.style.display = 'none';
+        document.getElementById('btn-bg').textContent = 'Background';
+      } else {
+        overlayB.style.display = '';
+        overlayB.src           = `background/${encodeURIComponent(f)}`;
+        document.getElementById('btn-bg').textContent = f.replace(/\.png$/,'').trim();
+      }
+    }
+    updateBackground();
+
+    // ----- BOUNCE logic (10% slower) -----
+    (function() {
+      const bounce = document.getElementById('bounce-chicken');
+      let bx = 0, by = 0;
+      let vx = (Math.random()*1.5 + 1.5) * 0.9,
+          vy = (Math.random()*1.5 + 1.5) * 0.9;
+      function step() {
+        bx += vx; by += vy;
+        const maxX = window.innerWidth  - bounce.clientWidth;
+        const maxY = window.innerHeight - bounce.clientHeight;
+        if (bx < 0 || bx > maxX) { vx = -vx; bx = Math.max(0,Math.min(bx,maxX)); }
+        if (by < 0 || by > maxY) { vy = -vy; by = Math.max(0,Math.min(by,maxY)); }
+        bounce.style.left = bx + 'px';
+        bounce.style.top  = by + 'px';
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    })();
+
+    // ----- ZOOM LOCK logic -----
+    (function() {
+      document.addEventListener('gesturestart', e=> e.preventDefault());
+      document.addEventListener('gesturechange', e=> e.preventDefault());
+      document.addEventListener('gestureend', e=> e.preventDefault());
+      document.addEventListener('wheel', e=>{
+        if (e.ctrlKey) e.preventDefault();
+      }, { passive:false });
+      document.addEventListener('keydown', e=>{
+        if (e.ctrlKey && (e.key==='+'||e.key==='-'||e.key==='0')) e.preventDefault();
+      });
+      let lastTouchEnd=0;
+      document.addEventListener('touchend', e=>{
+        const now=Date.now();
+        if (now-lastTouchEnd<=300) e.preventDefault();
+        lastTouchEnd=now;
+      }, false);
+      document.body.style.transform       = 'scale(1)';
+      document.body.style.transformOrigin = '0 0';
+      document.body.style.overflow        = 'hidden';
+    })();
+
+    // ----- SHARE UI logic -----
+    const btnShare  = document.getElementById('btn-share');
+    const shareOpts = document.getElementById('share-options');
+    const btnCopy   = document.getElementById('btn-copy');
+    const btnTweet  = document.getElementById('btn-tweet');
+
+    btnShare.addEventListener('click', () => {
+      shareOpts.style.display = shareOpts.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    // Capture a fixed 512×768px box centered in the viewport
+    btnCopy.addEventListener('click', () => {
+      const width = 517;
+      const height = 645;
+      const x = (window.innerWidth  - width)  / 3.15;
+      const y = (window.innerHeight - height) / 2;
+
+      html2canvas(document.body, {
+        x,
+        y,
+        width,
+        height,
+        backgroundColor: null,
+        useCORS: true
+      }).then(canvas => {
+        canvas.toBlob(blob => {
+          navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ])
+            .then(() => {
+              const prev = btnCopy.textContent;
+              btnCopy.textContent = 'Copied!';
+              setTimeout(() => btnCopy.textContent = prev, 1500);
+            });
+        });
+      });
+    });
+
+    btnTweet.addEventListener('click', () => {
+      window.open(
+        'https://x.com/intent/post?text=I%20AM%20%24CHICKEN',
+        '_blank','width=550,height=420'
+      );
+    });
+  </script>
+</body>
+</html>
