@@ -249,25 +249,25 @@
     halo.volume = 0.5;
     halo.play();
 
-  // Preload chicken sounds to avoid delays and reuse Audio objects
+  // ↓ Replace your existing chickenSounds block with this:
 const chickenSounds = [
-  new Audio('sounds/CH00.mp3'), // Adjust path if needed (e.g., 'sounds/CH00.mp3')
-  new Audio('sounds/CH01.mp3'),
-  new Audio('sounds/CH02.mp3')
+  new Audio('./sounds/CH00.mp3'),
+  new Audio('./sounds/CH01.mp3'),
+  new Audio('./sounds/CH02.mp3')
 ];
 
-// Set volume for all sounds
+// force-preload + set volume
 chickenSounds.forEach(sound => {
+  sound.preload = 'auto';
+  sound.load();      // ensure the browser actually fetches it
   sound.volume = 0.5;
 });
 
 function playRandomChickenSound() {
   const choice = chickenSounds[Math.floor(Math.random() * chickenSounds.length)];
-  choice.currentTime = 0; // Reset to start
+  choice.currentTime = 0;
   choice.play().catch(err => {
     console.warn('Chicken SFX play failed:', err);
-    // Optional: Provide user feedback
-    // alert('Failed to play sound. Ensure audio files are correctly placed.');
   });
 }
 
