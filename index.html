@@ -421,6 +421,7 @@ function playRandomChickenSound() {
         height,
         backgroundColor: null,
         useCORS: true
+        scale: window.devicePixelRatio || 1
       }).then(canvas => {
         canvas.toBlob(blob => {
           navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ])
