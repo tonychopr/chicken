@@ -354,6 +354,24 @@ function playRandomChickenSound() {
       }
     }
     updateBackground();
+    // ————————————————————————————————————
+// Preload every overlay image into the browser cache
+// ————————————————————————————————————
+const preloadList = [
+  { list: heads,   path: name => `HEAD/HEAD0/${encodeURIComponent(name)}` },
+  { list: glasses, path: name => `glassses/glasses0/${encodeURIComponent(name)}` },
+  { list: shirts,  path: name => `SHIRTHOODIE/SHIRTHOODIE%200/${encodeURIComponent(name)}` },
+  { list: backgrounds, path: name => `background/${encodeURIComponent(name)}` }
+];
+
+preloadList.forEach(({ list, path }) => {
+  list.filter(n => n).forEach(name => {
+    const img = new Image();
+    img.src = path(name);
+  });
+});
+// ————————————————————————————————————
+
 
     // ----- BOUNCE logic (10% slower) -----
     (function() {
