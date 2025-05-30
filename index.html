@@ -63,16 +63,17 @@
 
   <!-- Full-page background video -->
   <video
-    id="bg-video"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
-  >
-    <source src="BG.mp4" type="video/mp4">
-    Your browser doesn’t support HTML5 video.
-  </video>
+  id="bg-video"
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="metadata"
+  poster="mug.png"        <!-- optional: show a poster frame -->
+>
+  <source src="BG.webm"  type="video/webm">
+  <source src="BG.mp4"   type="video/mp4">
+</video>
 
   <!-- bouncing chicken silhouette (10% larger, color-cycling) -->
   <img
@@ -525,6 +526,15 @@ btnToggle.addEventListener('click', () => {
         }
       });
     });
+window.addEventListener('DOMContentLoaded', () => {
+  // wait until after the browser has painted
+  requestIdleCallback?.(() => {
+    const vid = document.getElementById('bg-video');
+    vid.preload = 'auto';  // now allow the full download
+    vid.load();            // start buffering in the background
+  }, {timeout:2000});
+});
+
   </script>
 </body>
 </html>
