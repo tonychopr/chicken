@@ -88,4 +88,9 @@ html, body {
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+/* Force the background video visible again */
+#bg-video {
+  display: block !important;
+}
+
 }
