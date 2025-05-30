@@ -27,13 +27,6 @@ html, body {
   z-index: 1;
   pointer-events: none;
 }
-/* force GPU-accelerated compositing for the two heaviest animators */
-#bounce-chicken,
-#bg-video {
-  will-change: transform, filter;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
 
 /* 3) Base chicken */
 #base-chicken {
